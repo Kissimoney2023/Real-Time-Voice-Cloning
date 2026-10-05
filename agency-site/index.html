@@ -78,6 +78,9 @@
     border: 0; padding: 6px 12px; cursor: pointer;
   }
   .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .head-tools { display: inline-flex; align-items: center; gap: 8px; }
+  .theme-btn { font: inherit; font-size: 13px; line-height: 1; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; }
+  .theme-btn:hover { background: var(--soft); }
 
   /* Buttons */
   .btn {
@@ -231,9 +234,12 @@
       <a href="#ueber" data-i18n="nav_about">Über mich</a>
       <a href="#kontakt" data-i18n="nav_contact">Kontakt</a>
     </nav>
-    <div class="lang" role="group" aria-label="Sprache / Language">
-      <button type="button" id="lang-de" aria-pressed="true">DE</button>
-      <button type="button" id="lang-en" aria-pressed="false">EN</button>
+    <div class="head-tools">
+      <button type="button" class="theme-btn" id="theme-btn" aria-label="Hell / Dunkel">Dunkel</button>
+      <div class="lang" role="group" aria-label="Sprache / Language">
+        <button type="button" id="lang-de" aria-pressed="true">DE</button>
+        <button type="button" id="lang-en" aria-pressed="false">EN</button>
+      </div>
     </div>
   </div>
 </header>
@@ -529,7 +535,25 @@
     document.documentElement.setAttribute("lang", l);
     document.getElementById("cal").setAttribute("aria-label", l === "en" ? "Example plan: 13 posts and 4 reels in 30 days" : "Beispielplan: 13 Posts und 4 Reels in 30 Tagen");
     try { localStorage.setItem("lang", l); } catch (e) {}
+    setThemeLabel();
   }
+  function setThemeLabel() {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var b = document.getElementById("theme-btn");
+    b.textContent = lang === "en" ? (dark ? "Light" : "Dark") : (dark ? "Hell" : "Dunkel");
+    b.setAttribute("aria-pressed", String(dark));
+  }
+  function setTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem("theme", t); } catch (e) {}
+    setThemeLabel();
+  }
+  document.getElementById("theme-btn").addEventListener("click", function () {
+    setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  var savedTheme = "light";
+  try { savedTheme = localStorage.getItem("theme") || "light"; } catch (e) {}
+  document.documentElement.setAttribute("data-theme", savedTheme === "dark" ? "dark" : "light");
   document.getElementById("lang-de").addEventListener("click", function () { setLang("de"); });
   document.getElementById("lang-en").addEventListener("click", function () { setLang("en"); });
   var saved = "de";
