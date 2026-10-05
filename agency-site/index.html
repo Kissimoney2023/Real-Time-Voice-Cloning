@@ -375,7 +375,7 @@
           <label for="f-salon"><span data-i18n="f_salon">Salon</span><input id="f-salon" name="salon"></label>
           <label for="f-web"><span data-i18n="f_web">Website oder Instagram</span><input id="f-web" name="web"></label>
           <label for="f-msg"><span data-i18n="f_msg">Nachricht (optional)</span><textarea id="f-msg" name="msg"></textarea></label>
-          <div class="hp" aria-hidden="true"><label for="f-co">Firma<input id="f-co" name="company" tabindex="-1" autocomplete="off"></label></div>
+          <div class="hp" aria-hidden="true"><label for="f-co">Leave empty<input id="f-co" name="hp_x7" tabindex="-1" autocomplete="off" data-lpignore="true" data-form-type="other"></label></div>
           <label class="check" for="f-ok"><input id="f-ok" name="consent" type="checkbox"><span><span data-i18n="f_ok1">Ich habe die</span> <a href="#datenschutz" data-i18n="f_priv">Datenschutzerklärung</a> <span data-i18n="f_ok2">gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden.</span></span></label>
           <div class="row"><button class="btn btn-main" type="submit" id="f-btn" data-i18n="f_btn">Nachricht senden</button></div>
           <p class="status" id="status" role="status" aria-live="polite"></p>
@@ -586,7 +586,7 @@
     ev.preventDefault();
     var m = MSG[lang], btn = document.getElementById("f-btn"), out = document.getElementById("out");
     out.hidden = true; document.getElementById("copied").textContent = "";
-    var data = { name: val("f-name"), email: val("f-email"), salon: val("f-salon"), web: val("f-web"), msg: val("f-msg"), company: val("f-co"), lang: lang };
+    var data = { name: val("f-name"), email: val("f-email"), salon: val("f-salon"), web: val("f-web"), msg: val("f-msg"), hp_x7: val("f-co"), lang: lang };
     if (!data.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) || !document.getElementById("f-ok").checked) { setStatus(m.invalid, "err"); return; }
     btn.disabled = true; setStatus(m.sending, "");
     function fail() {
@@ -597,7 +597,7 @@
     }
     fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
       .then(function (r) { if (!r.ok) throw new Error("http"); return r.json(); })
-      .then(function () { setStatus(m.ok, "ok"); document.getElementById("form").reset(); btn.disabled = false; })
+      .then(function (j) { if (!j || j.ok !== true || j.skipped) throw new Error("not sent"); setStatus(m.ok, "ok"); document.getElementById("form").reset(); btn.disabled = false; })
       .catch(fail);
   });
   document.getElementById("copy-msg").addEventListener("click", function () { copyText(document.getElementById("msg-out").textContent, flash); });

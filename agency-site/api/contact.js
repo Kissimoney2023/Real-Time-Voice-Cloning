@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
   if (typeof b === "string") { try { b = JSON.parse(b); } catch (e) { b = null; } }
   if (!b || typeof b !== "object") return res.status(400).json({ error: "invalid" });
 
-  if (b.company) return res.status(200).json({ ok: true }); // honeypot field: bots fill it, people never see it
+  if (b.hp_x7) return res.status(200).json({ ok: true, skipped: true }); // honeypot field: bots fill it, people never see it; the page treats "skipped" as not sent
 
   var ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
   if (limited(ip)) return res.status(429).json({ error: "rate" });
