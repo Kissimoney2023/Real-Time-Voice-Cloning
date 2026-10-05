@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Instagram-Inhalte und Anfrage-Automatik für Salons in Zürich.">
+<link rel="icon" href="img/mark.png" type="image/png">
+<title>Content Studio Zürich</title>
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+  /* Layout: Swiss-grid editorial page. Hero pairs the pitch with a real 30-day calendar (the product itself).
+     Rosewood is the single accent; plum ink and soft stone neutrals carry everything else. */
+  :root {
+    --bg: #F5F1F2;
+    --surface: #FFFFFF;
+    --ink: #2A1B2D;
+    --muted: #6B5A6E;
+    --line: #E4DADD;
+    --accent: #A23E5A;
+    --accent-ink: #FFFFFF;
+    --soft: #F3E3E8;
+    --ok: #1E7A4C;
+    --err: #B3261E;
+    --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1C1220; --surface: #281A2D; --ink: #F6EEF1; --muted: #BDA9B3;
+      --line: #3D2B43; --accent: #E58AA4; --accent-ink: #1C1220; --soft: #34202F; --ok: #7DD6A5; --err: #FF9C94;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1C1220; --surface: #281A2D; --ink: #F6EEF1; --muted: #BDA9B3;
+    --line: #3D2B43; --accent: #E58AA4; --accent-ink: #1C1220; --soft: #34202F; --ok: #7DD6A5; --err: #FF9C94;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    padding-inline: clamp(16px, 4vw, 40px);
+    padding-block: 0;
+  }
+  .wrap { max-width: 1120px; margin-inline: auto; }
+  h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  /* Header */
+  .bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    margin-inline: calc(-1 * clamp(16px, 4vw, 40px));
+    padding-inline: clamp(16px, 4vw, 40px);
+  }
+  .bar-in { max-width: 1120px; margin-inline: auto; display: flex; align-items: center; gap: 20px; padding-block: 14px; }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; text-decoration: none; margin-right: auto; display: inline-flex; align-items: center; gap: 10px; }
+  .brand .mark { width: 32px; height: 32px; border-radius: 8px; display: block; }
+  .nav-links { display: flex; gap: 22px; font-size: 0.95rem; }
+  .nav-links a { text-decoration: none; color: var(--muted); }
+  .nav-links a:hover { color: var(--ink); }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lang button {
+    font: inherit; font-size: 0.85rem; font-weight: 600; background: transparent; color: var(--muted);
+    border: 0; padding: 6px 12px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+    padding: 13px 22px; border-radius: 10px; border: 1.5px solid var(--ink);
+  }
+  .btn-main { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-main:hover { filter: brightness(1.08); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { background: var(--soft); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(28px, 5vw, 64px); align-items: center; padding-block: clamp(40px, 8vw, 96px); }
+  .eyebrow { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2.4rem, 6.2vw, 4.6rem); font-weight: 700; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; margin-top: 22px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+  .plan { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: clamp(16px, 3vw, 26px); min-width: 0; }
+  .plan-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .plan-title { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
+  .plan-sub { font-size: 0.8rem; color: var(--muted); }
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+  .dow { font-size: 0.72rem; font-weight: 600; color: var(--muted); text-align: center; padding-bottom: 2px; }
+  .day {
+    aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 0.72rem; color: var(--muted); padding: 4px 6px; font-variant-numeric: tabular-nums;
+  }
+  .day.post { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .day.reel { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; font-size: 0.82rem; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+  .swatch.post { background: var(--accent); border-color: var(--accent); }
+  .swatch.reel { background: var(--ink); border-color: var(--ink); }
+
+  /* Sections */
+  section { padding-block: clamp(40px, 7vw, 80px); border-top: 1px solid var(--line); }
+  .sec-head { max-width: 40em; margin-bottom: clamp(24px, 4vw, 40px); }
+  .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; }
+  .sec-head p { color: var(--muted); margin-top: 14px; }
+
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .card h3 { font-size: 1.5rem; font-weight: 700; }
+  .card .tag { color: var(--muted); }
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .card li { padding-left: 22px; position: relative; }
+  .card li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 2px; background: var(--accent); }
+  .card .foot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); font-size: 0.95rem; color: var(--muted); }
+
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; counter-reset: step; margin: 0; padding: 0; list-style: none; }
+  .steps li { counter-increment: step; border-top: 3px solid var(--ink); padding-top: 16px; min-width: 0; }
+  .steps li::before { content: counter(step); font-family: var(--font-display); font-weight: 700; color: var(--accent); font-size: 1.1rem; display: block; margin-bottom: 8px; }
+  .steps h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+  .steps p { color: var(--muted); font-size: 0.97rem; }
+
+  .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .principles > div { background: var(--soft); border-radius: 14px; padding: 22px; min-width: 0; }
+  .principles h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+  .principles p { color: var(--muted); font-size: 0.97rem; }
+
+  /* About */
+  .about { display: grid; grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr); gap: clamp(24px, 5vw, 56px); align-items: start; }
+  .portrait { width: 100%; height: auto; max-width: 300px; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 14%; border-radius: 22px; border: 1px solid var(--line); display: block; }
+  .mono {
+    aspect-ratio: 1; max-width: 260px; width: 100%; border-radius: 22px; background: var(--soft); color: var(--accent);
+    display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: clamp(3rem, 9vw, 5.5rem); letter-spacing: -0.04em;
+    border: 1px solid var(--line);
+  }
+  .about h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; margin-bottom: 16px; }
+  .about p { color: var(--muted); max-width: 38em; }
+  .about p + p { margin-top: 14px; }
+  .facts { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; }
+  .facts li { padding-left: 22px; position: relative; }
+  .facts li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 2px; background: var(--accent); }
+
+  .about + .sub, .sub { font-size: 1.3rem; font-weight: 700; margin: clamp(32px, 5vw, 52px) 0 16px; }
+  .how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .how > div { border-top: 3px solid var(--ink); padding-top: 14px; min-width: 0; }
+  .how h4 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin: 0 0 6px; }
+  .how p { color: var(--muted); font-size: 0.97rem; }
+  .notbox { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: end; }
+  .notbox .sub { margin-top: clamp(32px, 5vw, 52px); }
+  .meet { display: grid; gap: 14px; justify-items: start; background: var(--soft); border-radius: 14px; padding: 22px; }
+  .meet p { color: var(--ink); font-weight: 500; max-width: 24em; }
+
+  .shelf { width: 100%; height: auto; max-width: 420px; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 62%; border-radius: 18px; margin-top: 24px; display: block; border: 1px solid var(--line); }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(24px, 5vw, 56px); }
+  form { display: grid; gap: 14px; }
+  label { display: grid; gap: 6px; font-size: 0.9rem; font-weight: 600; }
+  input, textarea {
+    font: inherit; font-weight: 400; color: var(--ink); background: var(--surface);
+    border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; width: 100%; min-width: 0;
+  }
+  input:focus-visible, textarea:focus-visible { border-color: var(--accent); }
+  textarea { min-height: 110px; resize: vertical; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 0.9rem; }
+  .check input { width: auto; margin-top: 4px; flex: none; }
+  .check a { color: var(--accent); }
+  .status { min-height: 1.4em; font-size: 0.95rem; font-weight: 600; }
+  .status.ok { color: var(--ok); }
+  .status.err { color: var(--err); }
+  .out { background: var(--surface); border: 1.5px dashed var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; }
+  .out pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; font-size: 0.95rem; }
+  .addr { font-weight: 600; user-select: all; overflow-wrap: anywhere; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .note { font-size: 0.85rem; color: var(--muted); }
+
+  /* Legal pages: hidden until their footer link is opened */
+  .legal { display: none; scroll-margin-top: 80px; }
+  .legal:target { display: block; }
+  .legal h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 8px; }
+  .legal h3 { font-size: 1.15rem; font-weight: 700; margin: 28px 0 8px; }
+  .legal p, .legal li { color: var(--muted); max-width: 46em; }
+  .legal p + p { margin-top: 10px; }
+  .legal ul { margin: 8px 0 0; padding-left: 1.2em; display: grid; gap: 6px; }
+  .legal .back { margin-top: 32px; }
+  .legal .back a { color: var(--accent); font-weight: 600; }
+  .todo { background: var(--soft); color: var(--ink); border-radius: 4px; padding: 0 5px; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 28px calc(28px + env(safe-area-inset-bottom, 0px)); font-size: 0.88rem; color: var(--muted); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  footer nav { display: flex; gap: 18px; }
+
+  @media (max-width: 880px) {
+    .hero, .contact, .about, .notbox { grid-template-columns: minmax(0, 1fr); }
+    .how { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .principles { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .cards { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><img class="mark" src="img/mark.png" alt="" width="32" height="32"><span id="brand">Content Studio Zürich</span></a>
+    <nav class="nav-links" aria-label="Navigation">
+      <a href="#leistungen" data-i18n="nav_services">Leistungen</a>
+      <a href="#ablauf" data-i18n="nav_process">Ablauf</a>
+      <a href="#ueber" data-i18n="nav_about">Über mich</a>
+      <a href="#kontakt" data-i18n="nav_contact">Kontakt</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" id="lang-de" aria-pressed="true">DE</button>
+      <button type="button" id="lang-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">Instagram-Inhalte für Salons in Zürich</p>
+      <h1 data-i18n="h1">30 Tage Inhalte. In einer Woche geliefert.</h1>
+      <p class="lead" data-i18n="lead">Gestaltete Posts, Texte in Ihrer Stimme und ein klarer Redaktionsplan. So bleibt Ihr Salon sichtbar, auch an Tagen, an denen für Instagram keine Zeit bleibt.</p>
+      <div class="cta-row">
+        <a class="btn btn-main" href="#kontakt" data-i18n="cta1">Beispiel-Posts anfragen</a>
+        <a class="btn btn-ghost" href="#ablauf" data-i18n="cta2">Ablauf ansehen</a>
+      </div>
+    </div>
+    <div class="plan" aria-labelledby="plan-title">
+      <div class="plan-head">
+        <h2 class="plan-title" id="plan-title" data-i18n="plan_title">Ein Monat im Überblick</h2>
+        <span class="plan-sub" data-i18n="plan_sub">Beispielplan</span>
+      </div>
+      <div class="cal" id="cal" role="img" aria-label="Beispielplan: 13 Posts und 4 Reels in 30 Tagen"></div>
+      <div class="legend">
+        <span><i class="swatch post"></i><span data-i18n="leg_post">13 Posts</span></span>
+        <span><i class="swatch reel"></i><span data-i18n="leg_reel">4 Reels</span></span>
+        <span><i class="swatch"></i><span data-i18n="leg_free">freie Tage</span></span>
+      </div>
+    </div>
+  </div>
+
+  <section id="leistungen">
+    <div class="sec-head">
+      <h2 data-i18n="svc_h">Zwei Leistungen für lokale Betriebe</h2>
+      <p data-i18n="svc_p">Ich arbeite mit wenigen Betrieben gleichzeitig. Sie bekommen Ergebnisse, die zu Ihrem Haus passen, und behalten jederzeit die Kontrolle.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <h3 data-i18n="c1_h">Content-Paket</h3>
+        <p class="tag" data-i18n="c1_tag">Für einen regelmässigen, einheitlichen Auftritt</p>
+        <ul>
+          <li data-i18n="c1_l1">12 bis 16 gestaltete Posts im Look Ihres Salons</li>
+          <li data-i18n="c1_l2">Texte in Ihrer Stimme, mit Hashtags</li>
+          <li data-i18n="c1_l3">Redaktionsplan für 30 Tage</li>
+          <li data-i18n="c1_l4">4 Reel-Skripte</li>
+        </ul>
+        <p class="foot" data-i18n="c1_foot">Lieferung innerhalb einer Woche nach dem Kennenlerngespräch.</p>
+      </article>
+      <article class="card">
+        <h3 data-i18n="c2_h">Anfrage-Automatik</h3>
+        <p class="tag" data-i18n="c2_tag">Damit keine Anfrage mehr liegen bleibt</p>
+        <ul>
+          <li data-i18n="c2_l1">Anfragen aus Formular, E-Mail oder WhatsApp landen in einer Liste</li>
+          <li data-i18n="c2_l2">Sofortige Antwort in Ihrem Ton</li>
+          <li data-i18n="c2_l3">Erinnerung an Sie, wenn niemand antwortet</li>
+          <li data-i18n="c2_l4">Wöchentliche Übersicht Ihrer Anfragen</li>
+        </ul>
+        <p class="foot" data-i18n="c2_foot">Einmalige Einrichtung plus kleine monatliche Betreuung.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="ablauf">
+    <div class="sec-head">
+      <h2 data-i18n="proc_h">So läuft die Zusammenarbeit</h2>
+      <p data-i18n="proc_p">Vier Schritte vom ersten Gespräch bis zur Freigabe. Sie wissen immer, was als Nächstes passiert.</p>
+    </div>
+    <ol class="steps">
+      <li><h3 data-i18n="s1_h">Kennenlernen</h3><p data-i18n="s1_p">15 Minuten: Ihre Leistungen, Ihr Ton, Ihre Vorbilder.</p></li>
+      <li><h3 data-i18n="s2_h">Stimme und Plan</h3><p data-i18n="s2_p">Ich halte Ihren Stil fest und plane 30 Tage.</p></li>
+      <li><h3 data-i18n="s3_h">Gestaltung</h3><p data-i18n="s3_p">Posts, Texte und Reel-Skripte entstehen in Ihren Farben.</p></li>
+      <li><h3 data-i18n="s4_h">Freigabe</h3><p data-i18n="s4_p">Sie prüfen alles. Veröffentlicht wird erst nach Ihrem Ja.</p></li>
+    </ol>
+  </section>
+
+  <section id="grundsaetze">
+    <div class="sec-head">
+      <h2 data-i18n="pr_h">Drei Zusagen</h2>
+    </div>
+    <div class="principles">
+      <div><h3 data-i18n="p1_h">Sie entscheiden</h3><p data-i18n="p1_p">Nichts wird ohne Ihre Freigabe veröffentlicht.</p></div>
+      <div><h3 data-i18n="p2_h">Ihre Zugänge bleiben Ihre</h3><p data-i18n="p2_p">Ich brauche keine Passwörter. Zugriff nur über Ihre eigenen, widerrufbaren Konten.</p></div>
+      <div><h3 data-i18n="p3_h">Ehrliche Aussagen</h3><p data-i18n="p3_p">Keine Versprechen zu Followern oder Umsatz, keine erfundenen Referenzen.</p></div>
+    </div>
+  </section>
+
+  <section id="ueber">
+    <div class="about">
+      <img class="portrait" id="portrait" src="img/portrait.jpg" alt="" width="800" height="1071">
+      <div>
+        <h2 data-i18n="ab_h">Über mich</h2>
+        <p data-i18n="ab_p1">Ich bin {name}, Designer und Audio-Kreativer. Gutes Design und ein klarer Ton gehören für mich zusammen: Ihr Salon soll auf Instagram so aussehen und klingen, wie er sich vor Ort anfühlt.</p>
+        <p data-i18n="ab_p2">Ich arbeite bewusst mit wenigen Salons gleichzeitig. So bleibt jeder Auftritt persönlich, und Sie haben von Anfang bis Ende dieselbe Ansprechperson.</p>
+        <p data-i18n="ab_p3">Beim Reel-Skript denke ich den Ton von Anfang an mit: Welche Stimme, welche Musik, welcher Rhythmus passt zu Ihrem Salon? Das entscheidet oft, ob ein Video hängen bleibt.</p>
+        <ul class="facts">
+          <li data-i18n="ab_f1">Ein Gespräch von 15 Minuten genügt für den Start</li>
+          <li data-i18n="ab_f2">Sie geben jeden Beitrag frei, bevor er erscheint</li>
+          <li data-i18n="ab_f3">Besondere Konditionen für die ersten Salons</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="sub" data-i18n="how_h">So arbeite ich</h3>
+    <div class="how">
+      <div><h4 data-i18n="how1_h">Zuhören zuerst</h4><p data-i18n="how1_p">Bevor ich gestalte, höre ich zu: Was machen Sie am besten, und wie sprechen Sie darüber?</p></div>
+      <div><h4 data-i18n="how2_h">Klar und konstant</h4><p data-i18n="how2_p">Ein einheitlicher Look, Texte in Ihrem Ton und ein Plan, der zu Ihrem Alltag passt.</p></div>
+      <div><h4 data-i18n="how3_h">Offen im Prozess</h4><p data-i18n="how3_p">Sie sehen alles vor der Veröffentlichung und sagen, was angepasst werden soll.</p></div>
+    </div>
+    <div class="notbox">
+      <div>
+        <h3 class="sub" data-i18n="not_h">Was Sie von mir nicht bekommen</h3>
+        <ul class="facts">
+          <li data-i18n="not1">Gekaufte Follower oder Likes</li>
+          <li data-i18n="not2">Beiträge, die ohne Ihre Freigabe erscheinen</li>
+          <li data-i18n="not3">Versprechen über Reichweite oder Umsatz</li>
+        </ul>
+      </div>
+      <div class="meet">
+        <p data-i18n="meet_p">Am einfachsten lernen wir uns über Ihre Beispiel-Posts kennen.</p>
+        <a class="btn btn-main" href="#kontakt" data-i18n="cta1">Beispiel-Posts anfragen</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="contact">
+      <div class="sec-head" style="margin-bottom:0">
+        <h2 data-i18n="ct_h">Beispiel-Posts anfragen</h2>
+        <p data-i18n="ct_p">Schreiben Sie mir kurz, wer Sie sind und welcher Salon es ist. Ich melde mich persönlich bei Ihnen.</p>
+        <img class="shelf" src="img/shelf.jpg" alt="" width="900" height="1205">
+      </div>
+      <div>
+        <form id="form" novalidate>
+          <label for="f-name"><span data-i18n="f_name">Ihr Name</span><input id="f-name" name="name" autocomplete="name"></label>
+          <label for="f-email"><span data-i18n="f_email">Ihre E-Mail-Adresse</span><input id="f-email" name="email" type="email" autocomplete="email"></label>
+          <label for="f-salon"><span data-i18n="f_salon">Salon</span><input id="f-salon" name="salon"></label>
+          <label for="f-web"><span data-i18n="f_web">Website oder Instagram</span><input id="f-web" name="web"></label>
+          <label for="f-msg"><span data-i18n="f_msg">Nachricht (optional)</span><textarea id="f-msg" name="msg"></textarea></label>
+          <div class="hp" aria-hidden="true"><label for="f-co">Firma<input id="f-co" name="company" tabindex="-1" autocomplete="off"></label></div>
+          <label class="check" for="f-ok"><input id="f-ok" name="consent" type="checkbox"><span><span data-i18n="f_ok1">Ich habe die</span> <a href="#datenschutz" data-i18n="f_priv">Datenschutzerklärung</a> <span data-i18n="f_ok2">gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden.</span></span></label>
+          <div class="row"><button class="btn btn-main" type="submit" id="f-btn" data-i18n="f_btn">Nachricht senden</button></div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="out" id="out" hidden aria-live="polite">
+          <p class="note" data-i18n="out_note">Das Senden hat nicht geklappt. Kopieren Sie den Text und schicken Sie ihn an diese Adresse:</p>
+          <div class="row"><span class="addr" id="addr"></span><button class="btn btn-ghost" type="button" id="copy-addr" data-i18n="copy_addr">Adresse kopieren</button></div>
+          <pre id="msg-out"></pre>
+          <div class="row"><button class="btn btn-ghost" type="button" id="copy-msg" data-i18n="copy_msg">Text kopieren</button><span class="note" id="copied" role="status"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="legal" id="impressum">
+    <h2>Impressum</h2>
+    <p>Angaben nach schweizerischem Recht.</p>
+    <h3>Betreiber der Website</h3>
+    <p><span data-site="owner"></span><br><span data-site="brand"></span> (<span data-site="legalForm"></span>)<br><span data-site="street"></span><br><span data-site="zipCity"></span><br>Schweiz</p>
+    <h3>Kontakt</h3>
+    <p>E-Mail: <span data-site="email"></span></p>
+    <h3>Handelsregister und Mehrwertsteuer</h3>
+    <p>UID: <span data-site="uid"></span><br>MWST-Nr.: <span data-site="vat"></span></p>
+    <h3>Inhaltlich verantwortlich</h3>
+    <p><span data-site="owner"></span></p>
+    <h3>Haftungsausschluss</h3>
+    <p>Die Inhalte dieser Website wurden mit grösster Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte übernehme ich keine Gewähr. Haftungsansprüche, die sich auf Schäden materieller oder ideeller Art beziehen und durch die Nutzung der Informationen entstanden sind, sind ausgeschlossen, soweit das Gesetz dies zulässt.</p>
+    <h3>Externe Links</h3>
+    <p>Diese Website kann Links auf Seiten Dritter enthalten. Auf deren Inhalte habe ich keinen Einfluss und übernehme dafür keine Verantwortung. Verantwortlich ist jeweils der Betreiber der verlinkten Seite.</p>
+    <h3>Urheberrecht und Bilder</h3>
+    <p>Texte, Gestaltung und Bilder dieser Website sind urheberrechtlich geschützt. Eine Verwendung ausserhalb der gesetzlichen Schranken bedarf meiner vorherigen Zustimmung. Einzelne Bilder auf dieser Website wurden mit KI-Werkzeugen erstellt.</p>
+    <p class="back"><a href="#top">Zurück nach oben</a></p>
+  </section>
+
+  <section class="legal" id="datenschutz">
+    <h2>Datenschutzerklärung</h2>
+    <p>Stand: 5. Oktober 2026. Diese Erklärung zeigt, welche Personendaten ich beim Besuch dieser Website bearbeite und wozu.</p>
+    <h3>1. Verantwortliche Person</h3>
+    <p><span data-site="owner"></span>, <span data-site="brand"></span>, <span data-site="street"></span>, <span data-site="zipCity"></span>, Schweiz<br>E-Mail: <span data-site="email"></span></p>
+    <h3>2. Anwendbares Recht</h3>
+    <p>Ich bearbeite Personendaten nach dem schweizerischen Datenschutzgesetz (DSG). Soweit die Datenschutz-Grundverordnung der EU (DSGVO) anwendbar ist, gelten zusätzlich deren Vorgaben.</p>
+    <h3>3. Besuch der Website und Server-Logdateien</h3>
+    <p>Beim Aufruf dieser Website bearbeitet der Hosting-Anbieter technisch notwendige Daten, zum Beispiel IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browsertyp und Betriebssystem. Das dient dem sicheren und stabilen Betrieb der Website. Hosting-Anbieter: <span data-site="host"></span>. Die Logdateien werden nach der Frist des Anbieters gelöscht: <span data-site="logRetention"></span>.</p>
+    <h3>4. Schriftarten (Google Fonts)</h3>
+    <p>Diese Website lädt Schriftarten von Servern von Google (Google Fonts). Dabei wird Ihre IP-Adresse an Google übermittelt, was auch in die USA erfolgen kann. Ich nutze die Schriftarten, damit die Seite einheitlich dargestellt wird.</p>
+    <h3>5. Kontaktaufnahme</h3>
+    <p>Wenn Sie das Kontaktformular nutzen oder mir schreiben, bearbeite ich Ihre Angaben (Name, E-Mail-Adresse, Salon, Website und Nachricht), um Ihre Anfrage zu beantworten und die Zusammenarbeit vorzubereiten. Das Formular überträgt diese Angaben an einen Server bei meinem Hosting-Anbieter, der sie per E-Mail an mich weiterleitet. Für den E-Mail-Versand nutze ich den Dienst Resend (Resend, Inc., USA). Zum Schutz vor Missbrauch kann dabei kurzzeitig technische Information wie Ihre IP-Adresse verarbeitet werden.</p>
+    <p>Anfragen speichere ich, solange es für die Bearbeitung nötig ist, und danach nur, soweit gesetzliche Aufbewahrungspflichten bestehen.</p>
+    <h3>6. Cookies und lokale Speicherung</h3>
+    <p>Diese Website setzt keine Cookies. Ihre gewählte Sprache (Deutsch oder Englisch) wird im lokalen Speicher Ihres Browsers abgelegt. Diese Angabe verlässt Ihr Gerät nicht und dient nur der Anzeige.</p>
+    <h3>7. Keine Analyse- und Werbe-Tools</h3>
+    <p>Ich verwende keine Analyse-, Tracking- oder Werbedienste auf dieser Website.</p>
+    <h3>8. Weitergabe an Dritte</h3>
+    <p>Ich gebe Personendaten nur weiter, wenn es für den Betrieb der Website oder die Bearbeitung Ihrer Anfrage nötig ist, zum Beispiel an den Hosting-Anbieter, an Resend (E-Mail-Versand des Formulars), an Google (Schriftarten) und an meinen E-Mail-Anbieter. Diese Anbieter können ihren Sitz oder ihre Server im Ausland haben. Für Kundenprojekte gelten gesonderte Vereinbarungen.</p>
+    <h3>9. Ihre Rechte</h3>
+    <p>Sie können von mir Auskunft über Ihre Personendaten verlangen und deren Berichtigung, Löschung oder Einschränkung der Bearbeitung beantragen. Sie können einer Bearbeitung widersprechen und, soweit anwendbar, die Herausgabe Ihrer Daten verlangen. Schreiben Sie dazu an die E-Mail-Adresse oben. Sie können sich ausserdem beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB) beschweren. Für Personen im EU-Raum ist die zuständige Aufsichtsbehörde Ihres Wohnorts erreichbar.</p>
+    <h3>10. Änderungen</h3>
+    <p>Ich kann diese Erklärung anpassen, zum Beispiel wenn sich die Website oder die Rechtslage ändert. Es gilt die auf der Website veröffentlichte Fassung.</p>
+    <p class="back"><a href="#top">Zurück nach oben</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="foot-name">© 2026 Content Studio Zürich · Zürich</span>
+    <nav aria-label="Rechtliches">
+      <a href="#impressum" data-i18n="imprint">Impressum</a>
+      <a href="#datenschutz" data-i18n="privacy">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Edit these before publishing the real site.
+  var SITE = {
+    brand: "Content Studio Zürich", owner: "Johnny Saah", email: "hallo@dein-studio.ch",
+    // Legal pages: fill these in. An empty field shows a highlighted "[bitte ergänzen]".
+    legalForm: "", street: "", zipCity: "", uid: "", vat: "", host: "Vercel Inc., USA", logRetention: ""
+  };
+
+  var EN = {
+    nav_services: "Services", nav_process: "Process", nav_about: "About me", nav_contact: "Contact",
+    eyebrow: "Instagram content for salons in Zurich",
+    h1: "30 days of content. Delivered in one week.",
+    lead: "Designed posts, captions in your voice and a clear posting calendar. Your salon stays visible, even on days when there is no time for Instagram.",
+    cta1: "Request sample posts", cta2: "See how it works",
+    plan_title: "One month at a glance", plan_sub: "Example plan",
+    leg_post: "13 posts", leg_reel: "4 reels", leg_free: "free days",
+    svc_h: "Two services for local businesses",
+    svc_p: "I work with a few businesses at a time. You get results that fit your salon, and you stay in control at every step.",
+    c1_h: "Content pack", c1_tag: "For a steady, consistent presence",
+    c1_l1: "12 to 16 designed posts in your salon's look", c1_l2: "Captions in your voice, with hashtags",
+    c1_l3: "A 30-day posting calendar", c1_l4: "4 reel scripts",
+    c1_foot: "Delivered within one week of the intro call.",
+    c2_h: "Enquiry automation", c2_tag: "So no enquiry gets left behind",
+    c2_l1: "Enquiries from form, email or WhatsApp land in one list", c2_l2: "Instant reply in your tone",
+    c2_l3: "A reminder to you when nobody has answered", c2_l4: "A weekly overview of your enquiries",
+    c2_foot: "One-time setup plus a small monthly care fee.",
+    proc_h: "How we work together",
+    proc_p: "Four steps from the first conversation to sign-off. You always know what happens next.",
+    s1_h: "Intro call", s1_p: "15 minutes: your services, your tone, the accounts you admire.",
+    s2_h: "Voice and plan", s2_p: "I capture your style and plan 30 days.",
+    s3_h: "Design", s3_p: "Posts, captions and reel scripts take shape in your colours.",
+    s4_h: "Sign-off", s4_p: "You review everything. Nothing is published until you say yes.",
+    pr_h: "Three promises",
+    p1_h: "You decide", p1_p: "Nothing is published without your approval.",
+    p2_h: "Your accounts stay yours", p2_p: "I don't need passwords. Access only through your own accounts, which you can revoke.",
+    p3_h: "Honest claims", p3_p: "No promises about followers or revenue, no invented references.",
+    ct_h: "Request sample posts",
+    ct_p: "Write me a few lines about who you are and which salon it is. I will get back to you personally.",
+    ab_h: "About me",
+    ab_p1: "I am {name}, a designer and audio creative. For me, good design and a clear tone belong together: your salon should look and sound on Instagram the way it feels in person.",
+    ab_p2: "I deliberately work with only a few salons at a time. That keeps every presence personal, and you deal with the same person from start to finish.",
+    ab_p3: "For the reel script I think about sound from the start: which voice, which music, which rhythm suits your salon? That often decides whether a video sticks.",
+    how_h: "How I work",
+    how1_h: "Listening first", how1_p: "Before I design anything, I listen: what do you do best, and how do you talk about it?",
+    how2_h: "Clear and consistent", how2_p: "One consistent look, captions in your tone and a plan that fits your daily routine.",
+    how3_h: "Open process", how3_p: "You see everything before it is published and tell me what to adjust.",
+    not_h: "What you will not get from me",
+    not1: "Bought followers or likes", not2: "Posts that go live without your approval", not3: "Promises about reach or revenue",
+    meet_p: "The easiest way to get to know each other is through your sample posts.",
+    ab_f1: "A 15-minute call is enough to get started", ab_f2: "You approve every post before it goes live", ab_f3: "Special terms for the first salons",
+    f_name: "Your name", f_salon: "Salon", f_web: "Website or Instagram", f_msg: "Message (optional)",
+    f_btn: "Send message", f_email: "Your email address", f_ok1: "I have read the", f_priv: "privacy policy", f_ok2: "and agree that my details are used to handle my enquiry.",
+    out_note: "Sending did not work. Copy the text and send it to this address:",
+    copy_addr: "Copy address", copy_msg: "Copy text",
+    imprint: "Legal notice", privacy: "Privacy"
+  };
+  var WD = { de: ["Mo","Di","Mi","Do","Fr","Sa","So"], en: ["Mo","Tu","We","Th","Fr","Sa","Su"] };
+  var lang = "de";
+
+  // 30-day example: posts Mon/Wed/Fri, reels on Saturdays (month starts on a Monday)
+  (function buildCalendar() {
+    var cal = document.getElementById("cal"), html = "";
+    for (var i = 0; i < 7; i++) html += '<div class="dow" data-dow="' + i + '"></div>';
+    for (var d = 1; d <= 30; d++) {
+      var wd = (d - 1) % 7, cls = "day";
+      if (wd === 0 || wd === 2 || wd === 4) cls += " post";
+      else if (wd === 5) cls += " reel";
+      html += '<div class="' + cls + '">' + d + "</div>";
+    }
+    cal.innerHTML = html;
+  })();
+
+  var nodes = document.querySelectorAll("[data-i18n]");
+  nodes.forEach(function (el) { el.setAttribute("data-de", el.textContent); });
+
+  function setLang(l) {
+    lang = l;
+    nodes.forEach(function (el) {
+      var k = el.getAttribute("data-i18n");
+      el.textContent = (l === "en" && EN[k] ? EN[k] : el.getAttribute("data-de")).replace("{name}", SITE.owner);
+    });
+    document.querySelectorAll("[data-dow]").forEach(function (el) { el.textContent = WD[l][+el.getAttribute("data-dow")]; });
+    document.getElementById("lang-de").setAttribute("aria-pressed", String(l === "de"));
+    document.getElementById("lang-en").setAttribute("aria-pressed", String(l === "en"));
+    document.documentElement.setAttribute("lang", l);
+    document.getElementById("cal").setAttribute("aria-label", l === "en" ? "Example plan: 13 posts and 4 reels in 30 days" : "Beispielplan: 13 Posts und 4 Reels in 30 Tagen");
+    try { localStorage.setItem("lang", l); } catch (e) {}
+  }
+  document.getElementById("lang-de").addEventListener("click", function () { setLang("de"); });
+  document.getElementById("lang-en").addEventListener("click", function () { setLang("en"); });
+  var saved = "de";
+  try { saved = localStorage.getItem("lang") || "de"; } catch (e) {}
+  setLang(saved === "en" ? "en" : "de");
+
+  document.getElementById("brand").textContent = SITE.brand;
+  document.getElementById("portrait").alt = SITE.owner;
+  document.querySelectorAll("[data-site]").forEach(function (el) {
+    var v = SITE[el.getAttribute("data-site")];
+    if (v) { el.textContent = v; } else { el.textContent = "[bitte ergänzen]"; el.className = "todo"; }
+  });
+  document.getElementById("addr").textContent = SITE.email;
+
+  function copyText(text, done) {
+    function fallback() { done(false); }
+    try { navigator.clipboard.writeText(text).then(function () { done(true); }, fallback); } catch (e) { fallback(); }
+  }
+  function flash(ok) {
+    var el = document.getElementById("copied");
+    el.textContent = ok ? (lang === "en" ? "Copied." : "Kopiert.") : (lang === "en" ? "Select the text and copy it manually." : "Text markieren und manuell kopieren.");
+  }
+  var MSG = {
+    de: { invalid: "Bitte geben Sie Ihren Namen und eine gültige E-Mail-Adresse an und bestätigen Sie die Datenschutzerklärung.", sending: "Wird gesendet …", ok: "Danke, Ihre Nachricht ist angekommen. Ich melde mich persönlich bei Ihnen.", err: "Das Senden hat nicht geklappt. Sie können den Text unten kopieren und mir direkt per E-Mail schicken.", hello: "Guten Tag", intro: "ich interessiere mich für Beispiel-Posts.", name: "Name", mail: "E-Mail", salon: "Salon", web: "Website oder Instagram" },
+    en: { invalid: "Please enter your name and a valid email address and confirm the privacy policy.", sending: "Sending …", ok: "Thank you, your message has arrived. I will get back to you personally.", err: "Sending did not work. You can copy the text below and email it to me directly.", hello: "Hello,", intro: "I would like to receive sample posts.", name: "Name", mail: "Email", salon: "Salon", web: "Website or Instagram" }
+  };
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function setStatus(text, kind) { var el = document.getElementById("status"); el.textContent = text; el.className = "status" + (kind ? " " + kind : ""); }
+  document.getElementById("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var m = MSG[lang], btn = document.getElementById("f-btn"), out = document.getElementById("out");
+    out.hidden = true; document.getElementById("copied").textContent = "";
+    var data = { name: val("f-name"), email: val("f-email"), salon: val("f-salon"), web: val("f-web"), msg: val("f-msg"), company: val("f-co"), lang: lang };
+    if (!data.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) || !document.getElementById("f-ok").checked) { setStatus(m.invalid, "err"); return; }
+    btn.disabled = true; setStatus(m.sending, "");
+    function fail() {
+      var lines = [m.hello, "", m.intro, m.name + ": " + data.name, m.mail + ": " + data.email, m.salon + ": " + (data.salon || "-"), m.web + ": " + (data.web || "-")];
+      if (data.msg) lines.push("", data.msg);
+      document.getElementById("msg-out").textContent = lines.join("\n");
+      out.hidden = false; setStatus(m.err, "err"); btn.disabled = false;
+    }
+    fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok) throw new Error("http"); return r.json(); })
+      .then(function () { setStatus(m.ok, "ok"); document.getElementById("form").reset(); btn.disabled = false; })
+      .catch(fail);
+  });
+  document.getElementById("copy-msg").addEventListener("click", function () { copyText(document.getElementById("msg-out").textContent, flash); });
+  document.getElementById("copy-addr").addEventListener("click", function () { copyText(SITE.email, flash); });
+</script>
+</body>
+</html>
