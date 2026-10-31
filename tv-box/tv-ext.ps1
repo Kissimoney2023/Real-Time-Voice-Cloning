@@ -192,8 +192,9 @@ function Resolve-VideoUrl([string]$NameOrUrl) {
 }
 
 function Show-Check {
-    & $script:AdbExe connect $script:Device
-    & $script:AdbExe devices
+    # Out-Host so the text shows on screen instead of leaking into Invoke-TvExt's return value.
+    & $script:AdbExe connect $script:Device 2>&1 | Out-Host
+    & $script:AdbExe devices 2>&1 | Out-Host
     Assert-Connected
     Send-Key 'KEYCODE_HOME'
     Write-Host 'Sent KEYCODE_HOME - the box should be on its home screen now.'
