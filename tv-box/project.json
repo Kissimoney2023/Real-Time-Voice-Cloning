@@ -1,0 +1,150 @@
+{
+  "project": "tv-box",
+  "brand": "JK AI Hub",
+  "owner": "Saah",
+  "status": "active",
+  "purpose": "Control a Xiaomi TV Box S from a Windows PC with Claude Code to preview YouTube channels, show a street food menu board, and test apps on a real TV.",
+  "device": {
+    "model": "Xiaomi TV Box S (3rd Gen)",
+    "os": "Google TV",
+    "display": "Sony TV via HDMI",
+    "ip": "192.168.8.149",
+    "adbPort": 5555,
+    "wifi": "yalloHome_B818_65A6",
+    "ipReservedInRouter": false
+  },
+  "computer": {
+    "os": "Windows",
+    "adbPath": "C:\\Users\\admin\\platform-tools\\adb.exe",
+    "projectFolder": "C:\\Users\\admin\\tv-box",
+    "screenshotsFolder": "C:\\Users\\admin\\tv-box\\screenshots"
+  },
+  "files": {
+    "instructions": "CLAUDE.md",
+    "script": "tv.ps1",
+    "channels": "channels.json",
+    "slashCommands": [
+      ".claude/commands/preview.md",
+      ".claude/commands/status.md",
+      ".claude/commands/list-apps.md",
+      ".claude/commands/install-apps.md"
+    ],
+    "menuBoard": {
+      "page": "menu-board/index.html",
+      "data": "menu-board/menu.json",
+      "example": "menu-board/menu.example.json"
+    },
+    "extensionScript": "tv-ext.ps1",
+    "templates": "templates/ (reference images the preview uses to recognise shelves and the account picker)"
+  },
+  "channels": [
+    {
+      "name": "CreativeKingTV",
+      "handle": "@CreativeKingTV",
+      "url": "https://www.youtube.com/@CreativeKingTV"
+    },
+    {
+      "name": "Kolokwa Soul",
+      "handle": "@KolokwaSoul",
+      "url": "https://www.youtube.com/@KolokwaSoul"
+    }
+  ],
+  "videos": [
+    {
+      "name": "Lift Your Head",
+      "url": "",
+      "notes": "Liberian gospel trap music video; add the link when ready"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "connect",
+      "name": "Connect to the box",
+      "steps": [
+        "adb connect 192.168.8.149:5555",
+        "adb devices must show 'device'",
+        "send KEYCODE_HOME to confirm"
+      ],
+      "approval": "none"
+    },
+    {
+      "id": "tv-status",
+      "name": "Check box status (read-only)",
+      "command": "/status",
+      "approval": "none"
+    },
+    {
+      "id": "channel-preview",
+      "name": "Channel preview station",
+      "command": "/preview <channel|all>",
+      "steps": [
+        "open channel /videos tab",
+        "take 4 scrolled screenshots",
+        "review thumbnails and titles from couch distance",
+        "save report.md"
+      ],
+      "approval": "none"
+    },
+    {
+      "id": "menu-board",
+      "name": "Menu board for the street food stand",
+      "steps": [
+        "edit menu.json",
+        "serve or host index.html",
+        "open it in TV Bro on the box",
+        "check readability from 3 meters"
+      ],
+      "approval": "ask before publishing online",
+      "rules": [
+        "use menu.example.json for tests only",
+        "never show the example menu at the stand"
+      ]
+    },
+    {
+      "id": "app-install",
+      "name": "Install apps one at a time",
+      "apps": [
+        {
+          "name": "TV Bro",
+          "package": "com.phlox.tvwebbrowser"
+        },
+        {
+          "name": "VLC",
+          "package": "org.videolan.vlc"
+        },
+        {
+          "name": "Send Files to TV",
+          "package": "com.yablio.sendfilestotv"
+        },
+        {
+          "name": "Downloader",
+          "package": "com.esaba.downloader"
+        }
+      ],
+      "approval": "ask before each install; Play Store only",
+      "command": "/install-apps",
+      "listCommand": "/list-apps"
+    }
+  ],
+  "safety": {
+    "onlyTargetIp": "192.168.8.149:5555",
+    "askBefore": [
+      "installing or pushing files",
+      "changing settings",
+      "uninstalling or disabling apps",
+      "clearing app data",
+      "publishing online"
+    ],
+    "never": [
+      "factory reset",
+      "install an APK without asking"
+    ],
+    "afterUse": "turn off network debugging on the box when not in use"
+  },
+  "nextSteps": [
+    "Reserve 192.168.8.149 in the yallo router for the box's MAC address",
+    "Add adb to PATH",
+    "Replace sample items in menu.json with the real menu",
+    "Host the menu board online for use at the stand"
+  ]
+}
