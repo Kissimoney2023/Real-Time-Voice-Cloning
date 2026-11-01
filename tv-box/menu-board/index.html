@@ -203,7 +203,7 @@ function render(m){
   } else { sp.style.display = 'none'; }
   fitCats();
   msgs = m.footerMessages || [];
-  if(msgs.length) document.getElementById('msg').textContent = msgs[msgIndex % msgs.length];
+  document.getElementById('msg').textContent = msgs.length ? msgs[msgIndex % msgs.length] : '';
 }
 render(MENU);
 
