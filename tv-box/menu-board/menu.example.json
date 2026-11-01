@@ -1,40 +1,40 @@
 {
   "name": "EXAMPLE STAND (TEST)",
-  "tagline": "Example menu - not real prices",
+  "tagline": "Example menu for testing the board only",
   "currency": "CHF",
   "footerMessages": [
-    "This is an example menu for testing the board",
-    "Edit menu.json to show your real menu",
+    "EXAMPLE ONLY - this is a test menu",
+    "Example footer message two",
     "Example footer message three"
   ],
   "categories": [
     {
-      "title": "Mains",
+      "title": "Example Mains",
       "items": [
-        { "name": "Example Burger", "desc": "Example patty, cheese, sauce", "price": 12.5, "badge": "BEST SELLER" },
-        { "name": "Example Wrap", "desc": "Example chicken, salad, sauce", "price": 11, "badge": "NEW" },
-        { "name": "Example Veggie Bowl", "desc": "Example rice and vegetables", "price": 10.5, "badge": "VEGGIE" },
-        { "name": "Example Hot Plate", "desc": "Example spicy dish", "price": 13, "badge": "SPICY" }
+        { "name": "Example Burger", "desc": "Example description", "price": 12.5, "badge": "BEST SELLER" },
+        { "name": "Example Wrap", "desc": "Example description", "price": 11.0 },
+        { "name": "Example Veggie Bowl", "desc": "Example description", "price": 10.5, "badge": "VEGGIE" },
+        { "name": "Example Spicy Plate", "desc": "Example description", "price": 13.0, "badge": "SPICY" }
       ]
     },
     {
-      "title": "Sides",
+      "title": "Example Sides",
       "items": [
-        { "name": "Example Fries", "desc": "Example crispy fries", "price": 5 },
-        { "name": "Example Loaded Fries", "desc": "Example cheese topping", "price": 8 },
+        { "name": "Example Fries", "desc": "Example description", "price": 5.0 },
+        { "name": "Example Loaded Fries", "desc": "Example description", "price": 8.0, "badge": "NEW" },
         { "name": "Example Salad", "desc": "", "price": 4.5 },
-        { "name": "Example Sold-Out Item", "desc": "Back tomorrow", "price": 6, "soldOut": true }
+        { "name": "Example Sold-Out Item", "desc": "Example description", "price": 6.0, "soldOut": true }
       ]
     },
     {
-      "title": "Drinks",
+      "title": "Example Drinks",
       "items": [
-        { "name": "Example Soda", "desc": "33 cl", "price": 3.5 },
-        { "name": "Example Water", "desc": "50 cl", "price": 3 },
-        { "name": "Example Iced Tea", "desc": "", "price": 4 },
+        { "name": "Example Soft Drink", "desc": "Example size", "price": 3.5 },
+        { "name": "Example Water", "desc": "Example size", "price": 3.0 },
+        { "name": "Example Iced Tea", "desc": "", "price": 4.0 },
         { "name": "Example Coffee", "desc": "", "price": 3.5 }
       ]
     }
   ],
-  "special": { "enabled": true, "title": "EXAMPLE SPECIAL", "text": "Any main + side + drink", "price": 17 }
+  "special": { "enabled": true, "title": "EXAMPLE SPECIAL", "text": "Example main + example side + example drink", "price": 17.0 }
 }
