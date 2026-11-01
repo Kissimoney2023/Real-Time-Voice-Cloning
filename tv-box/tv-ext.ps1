@@ -16,11 +16,23 @@ if (-not (Test-Path $script:AdbExe)) {
 $script:Root        = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Users\admin\tv-box' }
 $script:ChannelFile = Join-Path $script:Root 'channels.json'
 $script:YtPackage   = 'com.google.android.youtube.tv'   # YouTube on Google TV
-$script:LoadWaitSec = 6      # wait after opening a page before the first screenshot
-$script:ScrollWait  = 2      # wait after scrolling before a screenshot
-$script:ScrollPress = 3      # DPAD_DOWN presses per "scroll" (one press only moves one row)
+$script:LoadWaitSec = 4      # wait after opening a page before the first key press (page is drawn by ~3 s)
+$script:ScrollWait  = 1      # wait after the last key press before a screenshot. Keep it short: ~3 s after focus lands on a
+                             # tile YouTube starts a muted preview in it and the thumbnail goes dark in the screenshot.
+$script:ScrollPress = 3      # DPAD_RIGHT presses per "scroll" along the Videos shelf (about 3 new thumbnails per screen)
+# How the TV channel page behaves (measured 2026-11-01):
+#  - If nothing is pressed, YouTube auto-plays a channel mix about 12 s after the page opens, and every later
+#    screenshot is a black video frame. One DPAD_DOWN right after loading moves focus off "Play mix" and stops that.
+#  - The page is short: "For You" shelf, "Videos" shelf, "Shorts", "Subscriptions", then two buttons. Scrolling DOWN
+#    runs out after two screens, so the preview scrolls RIGHT along the Videos shelf instead to see more uploads.
+#  - If the same channel page is opened again while YouTube is still running, it comes back at the OLD scroll
+#    position. So the preview first presses UP several times to get back to the top (focus order from the top:
+#    mic button, description, "Play mix", For You shelf, Videos shelf, Shorts, Subscriptions, bottom buttons).
+$script:TopPress    = 8      # DPAD_UP presses to be sure we are at the top of the page
+$script:ToShelfPress = 3     # DPAD_DOWN presses from the top to the first video shelf (description, Play mix, For You)
+$script:ShelfLeftPress = 15  # DPAD_LEFT presses to get back to the first tile of the Videos shelf (it also remembers its position)
 $script:ScreenCount = 4
-$script:MinPngBytes = 40000  # smaller than this on a TV screen = almost certainly black/blank
+$script:MinPngBytes = 20000  # a fully black 1080p frame is ~10 KB; a sparse but real page can be ~28 KB
 
 # ---------- adb helpers (every call is pinned to $Device with -s) ----------
 function Invoke-Adb {
@@ -128,17 +140,41 @@ function Add-Report([string]$ChannelName, [string]$Url, [string[]]$Files) {
     Write-Host "Report: $report"
 }
 
+function Reset-ShelfToStart {
+    # Walk the focused shelf back to its first tile (shelves remember how far right they were last time).
+    # Extra LEFT presses at the first tile do nothing. The final RIGHT + LEFT re-enters tile 1 so YouTube's
+    # muted-preview timer restarts, which keeps the thumbnail visible for the screenshot taken right after.
+    for ($k = 0; $k -lt $script:ShelfLeftPress; $k++) { Send-Key 'KEYCODE_DPAD_LEFT'; Start-Sleep -Milliseconds 150 }
+    Send-Key 'KEYCODE_DPAD_RIGHT'; Start-Sleep -Milliseconds 300
+    Send-Key 'KEYCODE_DPAD_LEFT'
+    Start-Sleep -Seconds $script:ScrollWait
+}
+
 function Invoke-Preview([string]$Name) {
     $ch  = Find-Channel $Name
     $url = (Channel-Base $ch) + '/videos'
     Open-Url $url
     Start-Sleep -Seconds $script:LoadWaitSec
     Assert-YouTubeFocused
+    # 1) Back to the top of the page (YouTube remembers the old scroll position when a page is reopened).
+    for ($k = 0; $k -lt $script:TopPress; $k++) { Send-Key 'KEYCODE_DPAD_UP'; Start-Sleep -Milliseconds 250 }
+    # 2) Down to the first video shelf. Doing this straight away also matters because if the focus is left on
+    #    "Play mix", YouTube starts playing a channel mix by itself after ~12 s and every later screenshot is black.
+    for ($k = 0; $k -lt $script:ToShelfPress; $k++) { Send-Key 'KEYCODE_DPAD_DOWN'; Start-Sleep -Milliseconds 300 }
+    Reset-ShelfToStart
     $slug = Norm $ch.name
     $files = @()
     for ($i = 1; $i -le $script:ScreenCount; $i++) {
-        if ($i -gt 1) {
-            for ($k = 0; $k -lt $script:ScrollPress; $k++) { Send-Key 'KEYCODE_DPAD_DOWN'; Start-Sleep -Milliseconds 300 }
+        if ($i -eq 2) {
+            # Screen 1 = top of the page (For You shelf + top of the Videos shelf).
+            # One more DOWN puts the focus on the Videos shelf, which is the channel's upload list.
+            # The shelf remembers how far right it was last time, so walk back to the first tile.
+            # (Extra LEFT presses at the first tile do nothing; RIGHT past the LAST tile jumps to the Shorts row.)
+            Send-Key 'KEYCODE_DPAD_DOWN'; Start-Sleep -Milliseconds 300
+            Reset-ShelfToStart
+        } elseif ($i -gt 2) {
+            # Walk right along the Videos shelf to bring the next uploads into view.
+            for ($k = 0; $k -lt $script:ScrollPress; $k++) { Send-Key 'KEYCODE_DPAD_RIGHT'; Start-Sleep -Milliseconds 300 }
             Start-Sleep -Seconds $script:ScrollWait
         }
         try { $files += Take-Shot ("{0}_screen{1}" -f $slug, $i) }
