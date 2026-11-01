@@ -1,0 +1,40 @@
+{
+  "name": "EXAMPLE STAND (TEST)",
+  "tagline": "Example menu - not real prices",
+  "currency": "CHF",
+  "footerMessages": [
+    "This is an example menu for testing the board",
+    "Edit menu.json to show your real menu",
+    "Example footer message three"
+  ],
+  "categories": [
+    {
+      "title": "Mains",
+      "items": [
+        { "name": "Example Burger", "desc": "Example patty, cheese, sauce", "price": 12.5, "badge": "BEST SELLER" },
+        { "name": "Example Wrap", "desc": "Example chicken, salad, sauce", "price": 11, "badge": "NEW" },
+        { "name": "Example Veggie Bowl", "desc": "Example rice and vegetables", "price": 10.5, "badge": "VEGGIE" },
+        { "name": "Example Hot Plate", "desc": "Example spicy dish", "price": 13, "badge": "SPICY" }
+      ]
+    },
+    {
+      "title": "Sides",
+      "items": [
+        { "name": "Example Fries", "desc": "Example crispy fries", "price": 5 },
+        { "name": "Example Loaded Fries", "desc": "Example cheese topping", "price": 8 },
+        { "name": "Example Salad", "desc": "", "price": 4.5 },
+        { "name": "Example Sold-Out Item", "desc": "Back tomorrow", "price": 6, "soldOut": true }
+      ]
+    },
+    {
+      "title": "Drinks",
+      "items": [
+        { "name": "Example Soda", "desc": "33 cl", "price": 3.5 },
+        { "name": "Example Water", "desc": "50 cl", "price": 3 },
+        { "name": "Example Iced Tea", "desc": "", "price": 4 },
+        { "name": "Example Coffee", "desc": "", "price": 3.5 }
+      ]
+    }
+  ],
+  "special": { "enabled": true, "title": "EXAMPLE SPECIAL", "text": "Any main + side + drink", "price": 17 }
+}
