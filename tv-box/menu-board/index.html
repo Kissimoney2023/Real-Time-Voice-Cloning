@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Menu Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#14100d; --panel:#1f1813; --line:#3a2d22;
+    --cream:#f6ecdc; --muted:#b9a58d; --accent:#ffb02e; --accent2:#e8442f; --green:#5fd08a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;background:#000;overflow:hidden;cursor:none}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--cream)}
+  /* Fixed 1920x1080 stage scaled to fit any screen */
+  #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;
+    background:radial-gradient(1200px 700px at 20% -10%,#2b1f16 0%,var(--bg) 60%);
+    padding:56px 72px 0 72px;display:flex;flex-direction:column}
+  header{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:4px solid var(--accent);padding-bottom:20px}
+  .brand h1{font-size:84px;font-weight:900;letter-spacing:3px;text-transform:uppercase;line-height:1}
+  .brand p{font-size:30px;color:var(--muted);margin-top:8px}
+  #clock{font-size:44px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+  main{flex:1;display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:repeat(3,1fr);gap:40px;margin-top:34px;min-height:0}
+  .cat{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:22px 30px;display:flex;flex-direction:column;overflow:hidden;font-size:var(--fs,16px)}
+  .cat h2{font-size:2.7em;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:.5em;padding-bottom:.3em;border-bottom:2px solid var(--line)}
+  .item{padding:.6em 0;border-bottom:1px dashed var(--line)}
+  .item:last-child{border-bottom:none}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  .name{font-size:2.2em;font-weight:700;line-height:1.15}
+  .price{font-size:2.3em;font-weight:800;color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .desc{font-size:1.45em;color:var(--muted);margin-top:3px}
+  .badge{display:inline-block;font-size:.6em;font-weight:800;letter-spacing:.08em;background:var(--accent2);color:#fff;border-radius:.4em;padding:.1em .45em;margin-left:.5em;vertical-align:middle;white-space:nowrap}
+  .badge.veg{background:var(--green);color:#0c2316}
+  .sold .name,.sold .price,.sold .desc{opacity:.35;text-decoration:line-through}
+  .sold .tag{display:inline-block;font-size:.6em;font-weight:800;color:var(--accent2);margin-left:10px;text-decoration:none}
+  #special{margin-top:26px;background:linear-gradient(90deg,var(--accent2),#b8321f);border-radius:20px;padding:16px 34px;display:flex;align-items:center;justify-content:space-between}
+  #special .t{font-size:30px;font-weight:900;letter-spacing:3px;opacity:.9}
+  #special .x{font-size:44px;font-weight:800}
+  #special .p{font-size:58px;font-weight:900}
+  footer{height:92px;display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--muted)}
+  #msg{transition:opacity .6s}
+</style>
+</head>
+<body>
+<div id="stage">
+  <header>
+    <div class="brand"><h1 id="name"></h1><p id="tagline"></p></div>
+    <div id="clock"></div>
+  </header>
+  <main id="menu"></main>
+  <div id="special"></div>
+  <footer><span id="msg"></span></footer>
+</div>
+
+<script>
+/* ======= EDIT YOUR MENU HERE, or edit menu.json next to this file =======
+   If menu.json is available (when this page is served from a web address or
+   local server) it is loaded and refreshed every 60 seconds and overrides
+   the data below. Opened directly from a file, the data below is used. */
+const MENU = {
+  "name": "YOUR STAND NAME",
+  "tagline": "Fresh street food, made to order",
+  "currency": "CHF",
+  "footerMessages": [
+    "Ask about today's special",
+    "Cash and card accepted",
+    "Allergies? Please ask us before ordering",
+    "Follow us on Instagram and tell a friend"
+  ],
+  "categories": [
+    {
+      "title": "Mains",
+      "items": [
+        {
+          "name": "Sample Burger",
+          "desc": "Beef patty, cheese, house sauce",
+          "price": 12.5,
+          "badge": "BEST SELLER"
+        },
+        {
+          "name": "Sample Chicken Wrap",
+          "desc": "Grilled chicken, salad, garlic sauce",
+          "price": 11.0
+        },
+        {
+          "name": "Sample Veggie Bowl",
+          "desc": "Rice, grilled vegetables, herb dressing",
+          "price": 10.5,
+          "badge": "VEGGIE"
+        },
+        {
+          "name": "Sample Spicy Special",
+          "desc": "Ask for today's heat level",
+          "price": 13.0,
+          "badge": "SPICY"
+        }
+      ]
+    },
+    {
+      "title": "Sides",
+      "items": [
+        {
+          "name": "Fries",
+          "desc": "Crispy, salted",
+          "price": 5.0
+        },
+        {
+          "name": "Loaded Fries",
+          "desc": "Cheese and sauce",
+          "price": 8.0,
+          "badge": "NEW"
+        },
+        {
+          "name": "Side Salad",
+          "desc": "",
+          "price": 4.5
+        },
+        {
+          "name": "Sample Sold-Out Item",
+          "desc": "Back tomorrow",
+          "price": 6.0,
+          "soldOut": true
+        }
+      ]
+    },
+    {
+      "title": "Drinks",
+      "items": [
+        {
+          "name": "Soft Drink",
+          "desc": "33 cl can",
+          "price": 3.5
+        },
+        {
+          "name": "Water",
+          "desc": "50 cl",
+          "price": 3.0
+        },
+        {
+          "name": "Iced Tea",
+          "desc": "House made",
+          "price": 4.0
+        },
+        {
+          "name": "Coffee",
+          "desc": "",
+          "price": 3.5
+        }
+      ]
+    }
+  ],
+  "special": {
+    "enabled": true,
+    "title": "TODAY'S SPECIAL",
+    "text": "Any main + fries + drink",
+    "price": 17.0
+  }
+};
+
+const stage = document.getElementById('stage');
+function fit(){
+  // TV Bro on the Xiaomi box reports a bogus window.innerWidth/innerHeight (3227x1815 on a 960x540 viewport),
+  // so measure the real page area from the document element instead.
+  const w = document.documentElement.clientWidth  || window.innerWidth;
+  const h = document.documentElement.clientHeight || window.innerHeight;
+  const s = Math.min(w/1920, h/1080);
+  stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+}
+window.addEventListener('resize', fit); fit();
+
+function fmt(p, cur){
+  return (Math.round(p*100)%100===0) ? p.toFixed(0) + '.-' : p.toFixed(2);
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+let msgs = [], msgIndex = 0;
+function fitCats(){
+  document.querySelectorAll('.cat').forEach(function(c){
+    let fs = 17; c.style.setProperty('--fs', fs + 'px');
+    while(c.scrollHeight > c.clientHeight + 1 && fs > 10){ fs -= 0.5; c.style.setProperty('--fs', fs + 'px'); }
+  });
+}
+function render(m){
+  document.title = m.name + ' - Menu';
+  document.getElementById('name').textContent = m.name;
+  document.getElementById('tagline').textContent = m.tagline || '';
+  const menu = document.getElementById('menu');
+  menu.innerHTML = m.categories.map(c =>
+    '<section class="cat"><h2>' + esc(c.title) + '</h2>' +
+    c.items.map(i =>
+      '<div class="item' + (i.soldOut?' sold':'') + '"><div class="row"><div class="name">' + esc(i.name) +
+      (i.badge ? '<span class="badge' + (/veg/i.test(i.badge)?' veg':'') + '">' + esc(i.badge) + '</span>' : '') +
+      (i.soldOut ? '<span class="tag">SOLD OUT</span>' : '') +
+      '</div><div class="price">' + fmt(i.price, m.currency) + '</div></div>' +
+      (i.desc ? '<div class="desc">' + esc(i.desc) + '</div>' : '') + '</div>'
+    ).join('') + '</section>'
+  ).join('');
+  const sp = document.getElementById('special');
+  if(m.special && m.special.enabled){
+    sp.style.display = 'flex';
+    sp.innerHTML = '<div class="t">' + esc(m.special.title) + '</div><div class="x">' + esc(m.special.text) +
+      '</div><div class="p">' + m.currency + ' ' + fmt(m.special.price, m.currency) + '</div>';
+  } else { sp.style.display = 'none'; }
+  fitCats();
+  msgs = m.footerMessages || [];
+  document.getElementById('msg').textContent = msgs.length ? msgs[msgIndex % msgs.length] : '';
+}
+render(MENU);
+
+function tick(){
+  const d = new Date();
+  document.getElementById('clock').textContent =
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+tick(); setInterval(tick, 10000);
+
+setInterval(function(){
+  if(!msgs.length) return;
+  const el = document.getElementById('msg');
+  el.style.opacity = 0;
+  setTimeout(function(){ msgIndex++; el.textContent = msgs[msgIndex % msgs.length]; el.style.opacity = 1; }, 600);
+}, 7000);
+
+async function refresh(){
+  try{
+    const r = await fetch('menu.json?t=' + Date.now(), {cache:'no-store'});
+    if(r.ok){ render(await r.json()); }
+  }catch(e){ /* keep current menu */ }
+}
+if(location.protocol.indexOf('http') === 0){ refresh(); setInterval(refresh, 60000); }
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'f' || e.key === 'F'){
+    if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+  }
+});
+</script>
+</body>
+</html>

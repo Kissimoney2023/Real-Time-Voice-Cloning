@@ -1,0 +1,41 @@
+{
+  "name": "YOUR STAND NAME",
+  "tagline": "Fresh street food, made to order",
+  "currency": "CHF",
+  "footerMessages": [
+    "Ask about today's special",
+    "Cash and card accepted",
+    "Allergies? Please ask us before ordering",
+    "Follow us on Instagram and tell a friend"
+  ],
+  "categories": [
+    {
+      "title": "Mains",
+      "items": [
+        { "name": "Sample Burger", "desc": "Beef patty, cheese, house sauce", "price": 12.5, "badge": "BEST SELLER" },
+        { "name": "Sample Chicken Wrap", "desc": "Grilled chicken, salad, garlic sauce", "price": 11.0 },
+        { "name": "Sample Veggie Bowl", "desc": "Rice, grilled vegetables, herb dressing", "price": 10.5, "badge": "VEGGIE" },
+        { "name": "Sample Spicy Special", "desc": "Ask for today's heat level", "price": 13.0, "badge": "SPICY" }
+      ]
+    },
+    {
+      "title": "Sides",
+      "items": [
+        { "name": "Fries", "desc": "Crispy, salted", "price": 5.0 },
+        { "name": "Loaded Fries", "desc": "Cheese and sauce", "price": 8.0, "badge": "NEW" },
+        { "name": "Side Salad", "desc": "", "price": 4.5 },
+        { "name": "Sample Sold-Out Item", "desc": "Back tomorrow", "price": 6.0, "soldOut": true }
+      ]
+    },
+    {
+      "title": "Drinks",
+      "items": [
+        { "name": "Soft Drink", "desc": "33 cl can", "price": 3.5 },
+        { "name": "Water", "desc": "50 cl", "price": 3.0 },
+        { "name": "Iced Tea", "desc": "House made", "price": 4.0 },
+        { "name": "Coffee", "desc": "", "price": 3.5 }
+      ]
+    }
+  ],
+  "special": { "enabled": true, "title": "TODAY'S SPECIAL", "text": "Any main + fries + drink", "price": 17.0 }
+}
