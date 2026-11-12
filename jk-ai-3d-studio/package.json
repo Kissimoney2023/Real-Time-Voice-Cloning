@@ -1,0 +1,10 @@
+{
+  "name": "jk-ai-3d-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-project.mjs examples/demo-30s/project.json",
+    "test": "node --test scripts/validate-project.test.mjs"
+  }
+}

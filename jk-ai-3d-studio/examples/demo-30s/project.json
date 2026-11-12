@@ -1,0 +1,86 @@
+{
+  "title": "Demo: Two Friends on the Street (30s)",
+  "fps": 24,
+  "width": 1920,
+  "height": 1080,
+  "durationFrames": 720,
+  "characters": [
+    {
+      "id": "johnny",
+      "displayName": "Johnny",
+      "model": "assets/characters/johnny.glb",
+      "license": { "spdx": "UNKNOWN", "source": "TBD - supply a rigged humanoid GLB", "commercialUse": true },
+      "clips": { "idle": "Idle", "walk": "Walk" },
+      "visemeMorphs": { "A": "viseme_PP", "B": "viseme_kk", "C": "viseme_E", "D": "viseme_aa", "E": "viseme_O", "F": "viseme_U", "G": "viseme_FF", "H": "viseme_nn", "X": "viseme_sil" },
+      "voiceId": "TBD"
+    },
+    {
+      "id": "mama-siah",
+      "displayName": "Mama Siah",
+      "model": "assets/characters/mama-siah.glb",
+      "license": { "spdx": "UNKNOWN", "source": "TBD - supply a rigged humanoid GLB", "commercialUse": true },
+      "clips": { "idle": "Idle", "walk": "Walk" },
+      "visemeMorphs": { "A": "viseme_PP", "B": "viseme_kk", "C": "viseme_E", "D": "viseme_aa", "E": "viseme_O", "F": "viseme_U", "G": "viseme_FF", "H": "viseme_nn", "X": "viseme_sil" },
+      "voiceId": "TBD"
+    }
+  ],
+  "environments": [
+    {
+      "id": "market-street",
+      "displayName": "Market street",
+      "model": "assets/environments/market-street.glb",
+      "license": { "spdx": "UNKNOWN", "source": "TBD", "commercialUse": true }
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-1-establishing",
+      "type": "establishing",
+      "startFrame": 0,
+      "durationFrames": 216,
+      "environmentId": "market-street",
+      "characters": [
+        { "id": "johnny", "position": [-4, 0, 0], "clip": "walk" },
+        { "id": "mama-siah", "position": [2, 0, 0], "clip": "idle" }
+      ],
+      "camera": [
+        { "frame": 0, "position": [0, 6, 14], "lookAt": [0, 1, 0], "fov": 40, "ease": "easeInOut" },
+        { "frame": 215, "position": [2, 4, 10], "lookAt": [0, 1.4, 0], "fov": 40 }
+      ]
+    },
+    {
+      "id": "shot-2-two-shot",
+      "type": "two-shot",
+      "startFrame": 216,
+      "durationFrames": 288,
+      "environmentId": "market-street",
+      "characters": [
+        { "id": "johnny", "position": [-1, 0, 0], "clip": "idle" },
+        { "id": "mama-siah", "position": [1, 0, 0], "clip": "idle" }
+      ],
+      "camera": [
+        { "frame": 0, "position": [0, 1.5, 6], "lookAt": [0, 1.4, 0], "fov": 35 },
+        { "frame": 287, "position": [0.4, 1.5, 5.2], "lookAt": [0, 1.4, 0], "fov": 35 }
+      ]
+    },
+    {
+      "id": "shot-3-close-up",
+      "type": "close-up",
+      "startFrame": 504,
+      "durationFrames": 216,
+      "environmentId": "market-street",
+      "characters": [
+        { "id": "mama-siah", "position": [1, 0, 0], "clip": "idle" }
+      ],
+      "camera": [
+        { "frame": 0, "position": [1.2, 1.6, 2.4], "lookAt": [1, 1.6, 0], "fov": 28 }
+      ]
+    }
+  ],
+  "dialogue": [
+    { "id": "line-1", "characterId": "johnny", "text": "Mama Siah! I'm home.", "audio": "audio/line-1.wav", "startFrame": 240, "durationFrames": 72, "visemes": "audio/line-1.visemes.json" },
+    { "id": "line-2", "characterId": "mama-siah", "text": "Johnny, my son. Come, let me look at you.", "audio": "audio/line-2.wav", "startFrame": 336, "durationFrames": 120, "visemes": "audio/line-2.visemes.json" },
+    { "id": "line-3", "characterId": "mama-siah", "text": "Monrovia missed you.", "audio": "audio/line-3.wav", "startFrame": 528, "durationFrames": 96, "visemes": "audio/line-3.visemes.json" }
+  ],
+  "audio": { "ambience": "audio/market-ambience.wav" }
+}

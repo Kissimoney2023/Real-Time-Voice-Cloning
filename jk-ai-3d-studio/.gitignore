@@ -1,0 +1,6 @@
+node_modules/
+out/
+*.mp4
+*.blend1
+.env
+remotion-app/node_modules/
