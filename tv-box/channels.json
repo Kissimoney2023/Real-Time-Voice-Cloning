@@ -1,0 +1,11 @@
+{
+  "channels": [
+    { "name": "CreativeKingTV", "handle": "@CreativeKingTV", "url": "https://www.youtube.com/@CreativeKingTV", "notes": "" },
+    { "name": "Kolokwa Soul",   "handle": "@KolokwaSoul",   "url": "https://www.youtube.com/@KolokwaSoul",   "notes": "" }
+  ],
+  "videos": [
+    { "name": "Lift Your Head", "url": "", "notes": "placeholder - add link with: tv add \"Lift Your Head\" <url>" },
+    { "name": "Music Video 2",  "url": "", "notes": "placeholder" },
+    { "name": "Music Video 3",  "url": "", "notes": "placeholder" }
+  ]
+}

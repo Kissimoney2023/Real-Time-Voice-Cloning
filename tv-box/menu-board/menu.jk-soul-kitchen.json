@@ -1,0 +1,39 @@
+{
+  "theme": "kente",
+  "name": "JK Soul Kitchen",
+  "tagline": "",
+  "currency": "CHF",
+  "footerMessages": [],
+  "categories": [
+    {
+      "title": "Mains",
+      "items": [
+        { "name": "Rice & Greens", "desc": "Rice with cassava leaves or potato greens", "price": 10.0 },
+        { "name": "Dry Rice & Fried Fish", "desc": "Seasoned rice, fried fish, plantain", "price": 12.0 },
+        { "name": "Jollof Rice", "desc": "Spiced tomato rice with chicken or beef", "price": 13.0 },
+        { "name": "Fufu & Soup", "desc": "Pounded cassava served with soup", "price": 12.0 },
+        { "name": "Fried Plantain & Chicken", "desc": "Fried plantain with chicken", "price": 12.0 }
+      ]
+    },
+    {
+      "title": "Snacks",
+      "items": [
+        { "name": "Kala", "desc": "Sweet fried dough balls", "price": 3.0 },
+        { "name": "Roasted Corn", "desc": "", "price": 4.0 },
+        { "name": "Kelewele", "desc": "Spicy fried plantain", "price": 5.0 }
+      ]
+    },
+    {
+      "title": "Drinks",
+      "items": [
+        { "name": "Ginger Beer", "desc": "Homemade, spicy and sweet", "price": 4.0 },
+        { "name": "Vimto", "desc": "", "price": 3.5 },
+        { "name": "Coca-Cola", "desc": "", "price": 2.5 },
+        { "name": "Sprite", "desc": "", "price": 2.5 },
+        { "name": "Orange Fanta", "desc": "", "price": 2.5 },
+        { "name": "Water", "desc": "", "price": 1.5 }
+      ]
+    }
+  ],
+  "special": { "enabled": false, "title": "", "text": "", "price": 0 }
+}
