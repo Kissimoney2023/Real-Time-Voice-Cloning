@@ -1,0 +1,41 @@
+{
+  "theme": "kente",
+  "name": "JK KITCHEN (DRAFT NAME)",
+  "tagline": "Example menu - names and prices are placeholders",
+  "currency": "CHF",
+  "footerMessages": [
+    "EXAMPLE ONLY - test menu, not real prices",
+    "Example footer message two",
+    "Example footer message three"
+  ],
+  "categories": [
+    {
+      "title": "Mains",
+      "items": [
+        { "name": "Example Jollof Rice", "desc": "Example description", "price": 15.0, "badge": "BEST SELLER" },
+        { "name": "Example Palm Butter Stew", "desc": "Example description", "price": 17.0 },
+        { "name": "Example Fish Stew", "desc": "Example description", "price": 16.0, "badge": "SPICY" },
+        { "name": "Example Veggie Plate", "desc": "Example description", "price": 13.0, "badge": "VEGGIE" }
+      ]
+    },
+    {
+      "title": "Sides",
+      "items": [
+        { "name": "Example Fufu", "desc": "Example description", "price": 5.0 },
+        { "name": "Example Fried Plantain", "desc": "Example description", "price": 5.0, "badge": "NEW" },
+        { "name": "Example Pepper Sauce", "desc": "", "price": 2.0 },
+        { "name": "Example Sold-Out Item", "desc": "Back tomorrow", "price": 6.0, "soldOut": true }
+      ]
+    },
+    {
+      "title": "Drinks",
+      "items": [
+        { "name": "Example Soft Drink", "desc": "33 cl", "price": 3.5 },
+        { "name": "Example Water", "desc": "50 cl", "price": 3.0 },
+        { "name": "Example Ginger Drink", "desc": "", "price": 4.0 },
+        { "name": "Example Coffee", "desc": "", "price": 3.5 }
+      ]
+    }
+  ],
+  "special": { "enabled": true, "title": "EXAMPLE SPECIAL", "text": "Example main + example side + example drink", "price": 19.0 }
+}
