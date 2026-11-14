@@ -31,8 +31,8 @@
   .desc{font-size:1.45em;color:var(--muted);margin-top:3px}
   .badge{display:inline-block;font-size:.6em;font-weight:800;letter-spacing:.08em;background:var(--accent2);color:#fff;border-radius:.4em;padding:.1em .45em;margin-left:.5em;vertical-align:middle;white-space:nowrap}
   .badge.veg{background:var(--green);color:#0c2316}
-  .sold .name,.sold .price,.sold .desc{opacity:.35;text-decoration:line-through}
-  .sold .tag{display:inline-block;font-size:.6em;font-weight:800;color:var(--accent2);margin-left:10px;text-decoration:none}
+  .sold .nt,.sold .price,.sold .desc{opacity:.35;text-decoration:line-through}
+  .sold .tag{display:inline-block;font-size:.6em;font-weight:800;letter-spacing:.08em;background:#c8102e;color:#fff;border-radius:.4em;padding:.1em .5em;margin-left:.6em;vertical-align:middle;white-space:nowrap;text-decoration:none}
   #special{margin-top:26px;background:linear-gradient(90deg,var(--accent2),#b8321f);border-radius:20px;padding:16px 34px;display:flex;align-items:center;justify-content:space-between}
   #special .t{font-size:30px;font-weight:900;letter-spacing:3px;opacity:.9}
   #special .x{font-size:44px;font-weight:800}
@@ -197,10 +197,15 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','
 
 let msgs = [], msgIndex = 0;
 function fitCats(){
-  document.querySelectorAll('.cat').forEach(function(c){
+  const cats = document.querySelectorAll('.cat');
+  let best = 17;
+  cats.forEach(function(c){
     let fs = 17; c.style.setProperty('--fs', fs + 'px');
     while(c.scrollHeight > c.clientHeight + 1 && fs > 10){ fs -= 0.5; c.style.setProperty('--fs', fs + 'px'); }
+    if(fs < best) best = fs;
   });
+  // use the smallest size for every column so the three columns match
+  cats.forEach(function(c){ c.style.setProperty('--fs', best + 'px'); });
 }
 function render(m){
   document.title = m.name + ' - Menu';
@@ -211,7 +216,7 @@ function render(m){
   menu.innerHTML = m.categories.map(c =>
     '<section class="cat"><h2>' + esc(c.title) + '</h2>' +
     c.items.map(i =>
-      '<div class="item' + (i.soldOut?' sold':'') + '"><div class="row"><div class="name">' + esc(i.name) +
+      '<div class="item' + (i.soldOut?' sold':'') + '"><div class="row"><div class="name"><span class="nt">' + esc(i.name) + '</span>' +
       (i.badge ? '<span class="badge' + (/veg/i.test(i.badge)?' veg':'') + '">' + esc(i.badge) + '</span>' : '') +
       (i.soldOut ? '<span class="tag">SOLD OUT</span>' : '') +
       '</div><div class="price">' + fmt(i.price, m.currency) + '</div></div>' +
